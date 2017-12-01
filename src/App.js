@@ -73,7 +73,7 @@ functionFroApp() {
     return(
       <form className = "formBorder">
         <div>
-          <input type = "checkbox" onChange = {this.props.changeBox}/>
+          <input type = "checkbox" />
           <input value = {this.state.text} onChange = {this.textChange} placeholder = "Enter new ToDo"/>
           <button onClick = {this.addItemsArr}>Add</button>
           {this.state.toDoItems.map(this.functionFroApp())}
@@ -122,7 +122,7 @@ constructor(props) {
   checkboxChangeFalse() {
     return(
       <div>
-        <textarea className = "changeArea" ref = "changeText" defaultValue = {this.itemDelOrNo()}></textarea>
+        <textarea className = "changeArea" ref = "changeText" defaultValue = {this.props.value}></textarea>
         <span className = "save" onClick = {this.saveButton}>{String.fromCharCode(9745)}</span>
       </div>
       );
@@ -140,10 +140,11 @@ constructor(props) {
       this.setState({buttonChange: false})
     }
 
-
   render() {
     return(
-      (this.state.buttonChange) ? (this.checkboxChangeFalse()) : (this.checkboxChangeTrue())
+    <div>
+      {(this.state.buttonChange) ? (this.checkboxChangeFalse()) : (this.checkboxChangeTrue())}
+    </div>
     )}
   }
 
