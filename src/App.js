@@ -1,36 +1,19 @@
 import React, { Component } from 'react';      
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-          <ToDoList />
-        </p>
-      </div>
-    );
-  }
-}
-
-
-class ToDoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       toDoItems: ["Hello","World","BlaBlaBla"],
-      text: ""
+      text: "",
+      select: false
     }
     this.deleteBlock = this.deleteBlock.bind(this);
     this.chengeText = this.chengeText.bind(this);
     this.textChange = this.textChange.bind(this);
     this.addItemsArr = this.addItemsArr.bind(this);
+    this.selectAll = this.selectAll.bind(this);
   }
 
   listLenght() {
@@ -44,7 +27,7 @@ class ToDoList extends Component {
       return;
     } else {
     this.setState({toDoItems: this.state.toDoItems.concat(this.state.text)}); 
-    this.state.text = "";
+    this.setState({text: ""})
     }
   }
   textChange(e) {
@@ -62,20 +45,34 @@ class ToDoList extends Component {
     arr[index] = text;
     this.setState({toDoItems: arr});
   }
+  selectAll() {
+     this.setState({select: !this.state.select})
+     console.log(this.state)
+  }
 
 functionFroApp() {
   return (
     (value, key) => 
-    <Application key = {key} index = {key} deleteBlock = {this.deleteBlock} chengeText = {this.chengeText} value = {value} />
+    <Application 
+        key = {key} 
+        index = {key} 
+        deleteBlock = {this.deleteBlock} 
+        chengeText = {this.chengeText} 
+        value = {value} 
+        select = {this.state.select} />
     )
 }
+
   render() {
     return(
       <form className = "formBorder">
-        <div>
-          <input type = "checkbox" />
-          <input value = {this.state.text} onChange = {this.textChange} placeholder = "Enter new ToDo"/>
-          <button onClick = {this.addItemsArr}>Add</button>
+        <div className="App">
+          <div className="title">todos</div>
+            <span>
+              <input type = "checkbox" onChange={this.selectAll} checked={this.state.select}/>
+              <input className="toDoLine" value = {this.state.text} onChange = {this.textChange} placeholder = "Enter new ToDo"/>
+            </span>
+          <button className="addButton" onClick = {this.addItemsArr}>Add</button>
           {this.state.toDoItems.map(this.functionFroApp())}
           <div className="infoList">All items {this.listLenght()}</div>
         </div>
@@ -89,12 +86,13 @@ class Application extends Component {
 constructor(props) {
   super(props);
   this.state = {
-    checkboxChange: false,
+    checkboxChange: this.props.select,
     buttonChange: false,
   }
   this.changeBox = this.changeBox.bind(this);
   this.changeButton = this.changeButton.bind(this);
   this.saveButton = this.saveButton.bind(this);
+  this.deleteButton = this.deleteButton.bind(this);
 }
 
   changeBox() {
@@ -111,8 +109,8 @@ constructor(props) {
  
   checkboxChangeTrue() {
     return(
-      <div>
-        <input className = "toDoCheck" type = "checkbox" onChange = {this.changeBox} defaultChecked = {this.state.checkboxChange}/>
+      <div className="enterLine">
+        <input className = "toDoCheck" type = "checkbox" onChange = {this.changeBox} checked = {this.state.checkboxChange}/>
         <span>{this.itemDelOrNo()}</span>
         <span className = "change" onClick = {this.changeButton}>{String.fromCharCode(9998)}</span>
         <span className = "delete" onClick = {this.deleteButton}>{String.fromCharCode(9746)}</span>
@@ -129,7 +127,7 @@ constructor(props) {
     }
   
     changeButton() {
-     this.setState({buttonChange: true})
+     this.setState({buttonChange: !this.state.buttonChange})
     }
     deleteButton() {
       this.props.deleteBlock(this.props.index);
